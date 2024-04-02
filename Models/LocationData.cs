@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace WallPaperGenerator.Models
 {
-    class LocationData
+    public class LocationData
     {
         public int Id { get; set; }
-        public string city { get; set; }
-        public string country { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
     }
 }

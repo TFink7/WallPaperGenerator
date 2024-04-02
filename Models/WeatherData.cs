@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WallPaperGenerator.Models
 {
-    class WeatherData
+    public class WeatherData
     {
         [Key]
         public int Id { get; set; }
