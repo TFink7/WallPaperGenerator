@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WallPaperGenerator.Models
 {
-    class WallpaperInfo
+    public class WallpaperInfo
     {
         [Key]
         public int Id { get; set; }
