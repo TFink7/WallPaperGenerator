@@ -25,18 +25,35 @@ namespace WallPaperGenerator.Services
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
 
-                dynamic? data = JsonConvert.DeserializeObject<dynamic>(body);
-                if (data == null) return null;
-
-                var weatherData = new WeatherData
+                try
                 {
-                    Condition = data.current.condition.text,
-                    TemperatureCelsius = data.current.temp_c,
-                    DataCapturedDate = DateTime.Now
-                };
+                    dynamic? data = JsonConvert.DeserializeObject<dynamic>(body);
+                    if (data == null) throw new JsonSerializationException();
 
-                return weatherData;
+
+                    var weatherData = new WeatherData
+                    {
+                        Condition = data.current.condition.text,
+                        TemperatureCelsius = data.current.temp_c,
+                        DataCapturedDate = DateTime.Now
+                    };
+
+                    return weatherData;
+                }
+                catch (JsonReaderException e)
+                {
+                    //handle invalid JSON format
+                    Console.WriteLine($"\nInvalid JSON format: {e.Message}");
+                    return null;
+                }
+                catch (JsonSerializationException e)
+                {
+                    //handle invalid JSON data
+                    Console.WriteLine($"\nInvalid JSON data: {e.Message}");
+                    return null;
+                }
             }
+
             catch (HttpRequestException e)
             {
                 Console.WriteLine($"\nException caught: {e.Message}");
