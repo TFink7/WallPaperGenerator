@@ -114,9 +114,11 @@ public class WeatherServiceTests
             )
             .ThrowsAsync(new HttpRequestException());
 
-        // Act & Assert
-        await Assert.ThrowsExceptionAsync<HttpRequestException>(
-            () => _weatherService.GetWeatherAsync("TestCity"));
+        // Act
+        var result = await _weatherService.GetWeatherAsync("TestCity");
+
+        // Assert
+        Assert.IsNull(result);
     }
 
 }
