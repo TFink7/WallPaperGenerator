@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -9,37 +8,36 @@ using System.Threading;
 using System.Threading.Tasks;
 using WallPaperGenerator.Models;
 using WallPaperGenerator.Services;
+using Newtonsoft.Json;
 
 [TestClass]
-public class WeatherServiceTests
+public class LocationServiceTests
 {
     private Mock<IHttpClientFactory> _mockHttpClientFactory;
     private Mock<HttpMessageHandler> _mockHttpMessageHandler;
-    private WeatherService _weatherService;
-    private string _validApiKey = "testapikey";
+    private LocationService _locationService;
+    private string _validApiKey = "testipgeoapikey";
 
     [TestInitialize]
     public void SetUp()
     {
-        // Setup mocks and service instance before each test
         _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
 
         _mockHttpClientFactory.Setup(x => x.CreateClient(It.IsAny<string>()))
             .Returns(new HttpClient(_mockHttpMessageHandler.Object));
 
-        _weatherService = new WeatherService(_mockHttpClientFactory.Object);
-        Environment.SetEnvironmentVariable("WEATHER_API_KEY", _validApiKey);
+        _locationService = new LocationService(_mockHttpClientFactory.Object);
+        Environment.SetEnvironmentVariable("IPGEOLOCATION_API_KEY", _validApiKey);
     }
 
-
     [TestMethod]
-    public async Task GetWeatherAsync_ReturnsWeatherData_WhenApiCallSucceeds()
+    public async Task GetCurrentLocationAsync_ReturnsLocationData_WhenApiCallSucceeds()
     {
         // Arrange
         var fakeResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
         {
-            Content = new StringContent("{\"location\":{\"name\":\"TestCity\"},\"current\":{\"temp_c\":20,\"condition\":{\"text\":\"Sunny\"}}}")
+            Content = new StringContent("{\"city\":\"TestCity\",\"country\":\"TestCountry\"}")
         };
 
         _mockHttpMessageHandler.Protected()
@@ -51,17 +49,16 @@ public class WeatherServiceTests
             .ReturnsAsync(fakeResponseMessage);
 
         // Act
-        var result = await _weatherService.GetWeatherAsync("TestCity");
+        var result = await _locationService.GetCurrentLocationAsync();
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual("Sunny", result.Condition);
-        Assert.AreEqual(20, result.TemperatureCelsius);
+        Assert.AreEqual("TestCity", result.City);
+        Assert.AreEqual("TestCountry", result.Country);
     }
 
-
     [TestMethod]
-    public async Task GetWeatherAsync_ReturnsNull_WhenApiResponseIsNotFound()
+    public async Task GetCurrentLocationAsync_ReturnsNull_WhenApiResponseIsNotFound()
     {
         // Arrange
         _mockHttpMessageHandler.Protected()
@@ -73,14 +70,14 @@ public class WeatherServiceTests
             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.NotFound));
 
         // Act
-        var result = await _weatherService.GetWeatherAsync("InvalidLocation");
+        var result = await _locationService.GetCurrentLocationAsync();
 
         // Assert
         Assert.IsNull(result);
     }
 
     [TestMethod]
-    public async Task GetWeatherAsync_ReturnsNull_WhenApiResponseHasInvalidData()
+    public async Task GetCurrentLocationAsync_ReturnsNull_WhenApiResponseHasInvalidData()
     {
         // Arrange
         var invalidContent = "Invalid Content";
@@ -96,14 +93,14 @@ public class WeatherServiceTests
             });
 
         // Act
-        var result = await _weatherService.GetWeatherAsync("TestCity");
+        var result = await _locationService.GetCurrentLocationAsync();
 
         // Assert
         Assert.IsNull(result);
     }
 
     [TestMethod]
-    public async Task GetWeatherAsync_ReturnsNull_WhenRequestFails()
+    public async Task GetCurrentLocationAsync_ReturnsNull_WhenRequestFails()
     {
         // Arrange
         _mockHttpMessageHandler.Protected()
@@ -115,10 +112,9 @@ public class WeatherServiceTests
             .ThrowsAsync(new HttpRequestException());
 
         // Act
-        var result = await _weatherService.GetWeatherAsync("TestCity");
+        var result = await _locationService.GetCurrentLocationAsync();
 
         // Assert
         Assert.IsNull(result);
     }
-
 }
