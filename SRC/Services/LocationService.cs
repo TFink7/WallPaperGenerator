@@ -8,14 +8,14 @@ namespace WallPaperGenerator.Services
 {
     public class LocationService : ILocationService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory _httpClientFactory; 
 
 
         public LocationService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
     
-        }
+        } 
 
         public async Task<LocationData> GetCurrentLocationAsync()
         {
