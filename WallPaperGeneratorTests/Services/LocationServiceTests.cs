@@ -17,7 +17,7 @@ public class LocationServiceTests
     private Mock<HttpMessageHandler> _mockHttpMessageHandler;
     private LocationService _locationService;
     private string _validApiKey = "testipgeoapikey";
-
+    
     [TestInitialize]
     public void SetUp()
     {

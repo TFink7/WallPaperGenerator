@@ -7,9 +7,5 @@
         mc:Ignorable="d"
         Title="Wallpaper Generator" Height="450" Width="800">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="GenerateWallpaperButton" Content="Generate Wallpaper" Click="GenerateWallpaperButton_Click" Width="200" Height="40" Margin="10"/>
-            <Image x:Name="WallpaperImage" Width="400" Height="225" Margin="10"/>
-        </StackPanel>
     </Grid>
 </Window>
