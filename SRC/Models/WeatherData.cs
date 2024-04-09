@@ -10,7 +10,6 @@ namespace WallPaperGenerator.Models
 {
     public class WeatherData
     {
-        [Key]
         public int Id { get; set; }
         public string Condition { get; set; }
         public double TemperatureCelsius { get; set; }

@@ -15,22 +15,21 @@ namespace WallPaperGenerator.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<WeatherData?> GetWeatherAsync(string location)
+        public async Task<WeatherData?> GetWeatherAsync(LocationData locationData)
         {
+            string query = $"{locationData.Latitude},{locationData.Longitude}";
             var apiKey = Environment.GetEnvironmentVariable("WEATHER_API_KEY");
+
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                var response = await client.GetAsync($"https://api.weatherapi.com/v1/current.json?key={apiKey}&q={location}&aqi=no");
+                var response = await client.GetAsync($"https://api.weatherapi.com/v1/current.json?key={apiKey}&q={Uri.EscapeDataString(query)}&aqi=no");
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
 
                 try
                 {
-                    dynamic? data = JsonConvert.DeserializeObject<dynamic>(body);
-                    if (data == null) throw new JsonSerializationException();
-
-
+                    dynamic? data = JsonConvert.DeserializeObject<dynamic>(body) ?? throw new JsonSerializationException();
                     var weatherData = new WeatherData
                     {
                         Condition = data.current.condition.text,

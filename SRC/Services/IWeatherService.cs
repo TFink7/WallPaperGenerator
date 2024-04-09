@@ -7,8 +7,8 @@ using WallPaperGenerator.Models;
 
 namespace WallPaperGenerator.Services
 {
-    interface IWeatherService
+    public interface IWeatherService
     {
-        Task<WeatherData?> GetWeatherAsync(string location);
+        Task<WeatherData?> GetWeatherAsync(LocationData locationData);
     }
 }

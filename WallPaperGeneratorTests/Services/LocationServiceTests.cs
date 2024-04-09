@@ -34,10 +34,9 @@ public class LocationServiceTests
     [TestMethod]
     public async Task GetCurrentLocationAsync_ReturnsLocationData_WhenApiCallSucceeds()
     {
-        // Arrange
         var fakeResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
         {
-            Content = new StringContent("{\"city\":\"TestCity\",\"country\":\"TestCountry\"}")
+            Content = new StringContent("{\"city\":\"TestCity\",\"country_name\":\"TestCountry\", \"latitude\":\"43.6532\", \"longitude\":\"-79.3832\"}")
         };
 
         _mockHttpMessageHandler.Protected()
@@ -48,13 +47,15 @@ public class LocationServiceTests
             )
             .ReturnsAsync(fakeResponseMessage);
 
-        // Act
         var result = await _locationService.GetCurrentLocationAsync();
 
-        // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual("TestCity", result.City);
-        Assert.AreEqual("TestCountry", result.Country);
+        Assert.AreEqual("TestCountry", result.Country); 
+                                                        
+                                                        
+        Assert.AreEqual("43.6532", result.Latitude);
+        Assert.AreEqual("-79.3832", result.Longitude);
     }
 
     [TestMethod]

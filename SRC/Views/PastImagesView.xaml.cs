@@ -10,23 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WallPaperGenerator.Services;
-using WallPaperGenerator.ViewModels;
-using System.Net.Http;
 
-namespace WallPaperGenerator
+namespace WallPaperGenerator.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for PastImagesView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class PastImagesView : Window
     {
-        public MainWindow()
+        public PastImagesView()
         {
             InitializeComponent();
         }
-
-        }
+    }
 }

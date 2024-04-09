@@ -29,9 +29,7 @@ namespace WallPaperGenerator.Services
 
                 try
                 {
-                    var locationData = JsonConvert.DeserializeObject<LocationData>(body);
-                    if (locationData == null) throw new JsonSerializationException();
-
+                    var locationData = JsonConvert.DeserializeObject<LocationData>(body) ?? throw new JsonSerializationException();
                     return locationData;
                 }
                 catch (JsonReaderException e)

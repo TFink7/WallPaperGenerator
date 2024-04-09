@@ -26,7 +26,7 @@ namespace WallPaperGenerator.Services
         public async Task<string> GenerateWallpaperAsync(string city, string country, string condition, double temperatureCelsius)
         {
             var prompt = $"An imaginative landscape of {city} in {country} showcasing {condition} weather at {temperatureCelsius}°C";
-            var request = new ImageGenerationRequest(prompt, OpenAI_API.Models.Model.DALLE3); // Adapt parameters as needed
+            var request = new ImageGenerationRequest(prompt, OpenAI_API.Models.Model.DALLE3); 
 
             var result = await _api.ImageGenerations.CreateImageAsync(request);
 

@@ -7,7 +7,7 @@ using WallPaperGenerator.Models;
 
 namespace WallPaperGenerator.Services
 {
-    interface ILocationService
+    public interface ILocationService
     {
         Task<LocationData> GetCurrentLocationAsync();
     }
