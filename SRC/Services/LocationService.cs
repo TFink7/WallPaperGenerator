@@ -8,14 +8,15 @@ namespace WallPaperGenerator.Services
 {
     public class LocationService : ILocationService
     {
-        private readonly IHttpClientFactory _httpClientFactory; 
+        private readonly IHttpClientFactory _httpClientFactory;
+
 
 
         public LocationService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-    
-        } 
+
+        }
 
         public async Task<LocationData> GetCurrentLocationAsync()
         {
@@ -34,20 +35,17 @@ namespace WallPaperGenerator.Services
                 }
                 catch (JsonReaderException e)
                 {
-                    // Handle invalid JSON format
                     Console.WriteLine($"\nInvalid JSON format: {e.Message}");
                     return null;
                 }
                 catch (JsonSerializationException e)
                 {
-                    // Handle invalid JSON content
                     Console.WriteLine($"\nInvalid JSON content: {e.Message}");
                     return null;
                 }
             }
             catch (HttpRequestException e)
             {
-                // Handle exceptions related to HTTP requests
                 Console.WriteLine($"\nHTTP Request Exception caught: {e.Message}");
                 return null;
             }

@@ -36,7 +36,7 @@ namespace WallPaperGenerator.ViewModels
             try
             {
                 LocationData locationData = await _locationService.GetCurrentLocationAsync();
- 
+
 
                 if (string.IsNullOrWhiteSpace(locationData.City) || string.IsNullOrEmpty(locationData.Country) || locationData.Latitude == null || locationData.Longitude == null)
                 {
@@ -58,27 +58,27 @@ namespace WallPaperGenerator.ViewModels
                     return;
                 }
                 await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
-             
+
                 Console.WriteLine("Wallpaper set successfully.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
-            
+
         }
 
         private void ViewPastImages(object parameter)
         {
-            
+
         }
 
         private void CustomOperation(object parameter)
         {
-            
+
         }
 
-        
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

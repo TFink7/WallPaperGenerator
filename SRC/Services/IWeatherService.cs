@@ -12,3 +12,4 @@ namespace WallPaperGenerator.Services
         Task<WeatherData?> GetWeatherAsync(LocationData locationData);
     }
 }
+

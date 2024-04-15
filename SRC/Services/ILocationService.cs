@@ -12,3 +12,5 @@ namespace WallPaperGenerator.Services
         Task<LocationData> GetCurrentLocationAsync();
     }
 }
+
+

@@ -61,7 +61,6 @@ public class LocationServiceTests
     [TestMethod]
     public async Task GetCurrentLocationAsync_ReturnsNull_WhenApiResponseIsNotFound()
     {
-        // Arrange
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
@@ -70,17 +69,14 @@ public class LocationServiceTests
             )
             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-        // Act
         var result = await _locationService.GetCurrentLocationAsync();
 
-        // Assert
         Assert.IsNull(result);
     }
 
     [TestMethod]
     public async Task GetCurrentLocationAsync_ReturnsNull_WhenApiResponseHasInvalidData()
     {
-        // Arrange
         var invalidContent = "Invalid Content";
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
@@ -93,17 +89,14 @@ public class LocationServiceTests
                 Content = new StringContent(invalidContent)
             });
 
-        // Act
         var result = await _locationService.GetCurrentLocationAsync();
 
-        // Assert
         Assert.IsNull(result);
     }
 
     [TestMethod]
     public async Task GetCurrentLocationAsync_ReturnsNull_WhenRequestFails()
     {
-        // Arrange
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
@@ -112,10 +105,8 @@ public class LocationServiceTests
             )
             .ThrowsAsync(new HttpRequestException());
 
-        // Act
         var result = await _locationService.GetCurrentLocationAsync();
 
-        // Assert
         Assert.IsNull(result);
     }
 }

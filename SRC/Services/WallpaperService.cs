@@ -11,36 +11,57 @@ using OpenAI_API;
 using OpenAI_API.Completions;
 using System.IO;
 using OpenAI_API.Images;
+using WallPaperGenerator.Models;
 
 namespace WallPaperGenerator.Services
 {
     public class WallpaperService : IWallpaperService
     {
         private readonly OpenAIAPI _api;
+        private readonly WallpaperInfoService _infoService;
 
-        public WallpaperService()
+        public WallpaperService(WallpaperInfoService wallpaperInfoService)
         {
             _api = new OpenAIAPI(APIAuthentication.Default);
+            _infoService = wallpaperInfoService;
         }
 
         public async Task<string> GenerateWallpaperAsync(string city, string country, string condition, double temperatureCelsius)
         {
             var prompt = $"An imaginative landscape of {city} in {country} showcasing {condition} weather at {temperatureCelsius}°C";
-            var request = new ImageGenerationRequest(prompt, OpenAI_API.Models.Model.DALLE3); 
+            var request = new ImageGenerationRequest(prompt, OpenAI_API.Models.Model.DALLE3);
 
             var result = await _api.ImageGenerations.CreateImageAsync(request);
 
             if (result.Data != null && result.Data.Count > 0)
             {
-                return result.Data[0].Url;
+                var imageUrl = result.Data[0].Url;
+
+                var weatherData = new WeatherData
+                {
+                    Condition = condition,
+                    TemperatureCelsius = temperatureCelsius,
+                    DataCapturedDate = DateTime.Now
+                };
+
+                var wallpaperInfo = new WallpaperInfo
+                {
+                    ImagePath = imageUrl, 
+                    Location = $"{city}, {country}",
+                    WeatherData = weatherData
+                };
+
+                await _infoService.AddOrUpdateWallpaperInfoAsync(wallpaperInfo);
+
+                return imageUrl;
             }
-            else 
+            else
             {
                 throw new InvalidOperationException("Failed to generate image URL.");
             }
         }
-        
-        
+
+
         public async Task SetWallpaperAsync(string imagePath)
         {
             string filename = Path.GetFileName(imagePath);

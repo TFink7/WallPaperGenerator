@@ -20,6 +20,7 @@ namespace WallPaperGenerator.Services
             string query = $"{locationData.Latitude},{locationData.Longitude}";
             var apiKey = Environment.GetEnvironmentVariable("WEATHER_API_KEY");
 
+
             try
             {
                 var client = _httpClientFactory.CreateClient();
