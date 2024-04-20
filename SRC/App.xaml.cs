@@ -19,30 +19,28 @@ namespace WallPaperGenerator
 
         public App()
         {
-            // Initialize ServiceCollection
             var services = new ServiceCollection();
             ConfigureServices(services);
-
-            // Build the ServiceProvider
             _serviceProvider = services.BuildServiceProvider();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlite("Data Source=wallpaperGenerator.db");
             });
 
+
+            services.AddHttpClient();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<IWeatherService, WeatherService>();
             services.AddSingleton<IWallpaperService, WallpaperService>();
-            services.AddTransient<WallpaperInfoService>();
+            services.AddSingleton<IWallpaperInfoService, WallpaperInfoService>();
 
-            services.AddSingleton<MainViewModel>();
-
-            services.AddHttpClient();
+            services.AddTransient<MainViewModel>();
+            services.AddTransient<PastImagesViewModel>();
+            services.AddTransient<MainWindow>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -52,15 +50,15 @@ namespace WallPaperGenerator
             using (var scope = _serviceProvider.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                dbContext.Database.Migrate(); 
+                dbContext.Database.Migrate();
+
+                var mainWindow = scope.ServiceProvider.GetRequiredService<MainWindow>();
+                var mainViewModel = scope.ServiceProvider.GetRequiredService<MainViewModel>();
+
+                mainWindow.DataContext = mainViewModel;
+
+                mainWindow.Show();
             }
-
-
-            var mainWindow = new MainWindow
-            {
-                DataContext = _serviceProvider.GetService<MainViewModel>()
-            };
-            mainWindow.Show();
         }
     }
 }

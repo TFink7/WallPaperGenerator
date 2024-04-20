@@ -14,6 +14,7 @@ namespace WallPaperGenerator.Data
         {
         }
         public DbSet<WallpaperInfo> Wallpapers { get; set; }
+        public DbSet<WeatherData> WeatherData { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

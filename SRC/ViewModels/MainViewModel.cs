@@ -4,7 +4,8 @@ using WallPaperGenerator.Commands;
 using WallPaperGenerator.Services;
 using System;
 using WallPaperGenerator.Models;
-using System.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace WallPaperGenerator.ViewModels
 {
@@ -12,72 +13,44 @@ namespace WallPaperGenerator.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand GenerateWallpaperCommand { get; private set; }
-        public ICommand ViewPastImagesCommand { get; private set; }
-        public ICommand CustomCommand { get; private set; }
-
         private readonly ILocationService _locationService;
         private readonly IWeatherService _weatherService;
         private readonly IWallpaperService _wallpaperService;
+        private readonly IWallpaperInfoService _wallpaperInfoService;
 
-        public MainViewModel(ILocationService locationService, IWeatherService weatherService, IWallpaperService wallpaperService)
+        public ICommand ViewPastImagesCommand { get; private set; }
+
+        private INotifyPropertyChanged _currentViewModel;
+        public INotifyPropertyChanged CurrentViewModel
+        {
+            get => _currentViewModel;
+            set
+            {
+                if (_currentViewModel != value)
+                {
+                    _currentViewModel = value;
+                    OnPropertyChanged(nameof(CurrentViewModel));
+                }
+            }
+        }
+
+        public MainViewModel(ILocationService locationService, IWeatherService weatherService, IWallpaperService wallpaperService, IWallpaperInfoService infoService)
         {
             _locationService = locationService;
             _weatherService = weatherService;
             _wallpaperService = wallpaperService;
+            _wallpaperInfoService = infoService;
 
-            GenerateWallpaperCommand = new RelayCommand(GenerateWallpaper);
-            ViewPastImagesCommand = new RelayCommand(ViewPastImages);
-            CustomCommand = new RelayCommand(CustomOperation);
+            ViewPastImagesCommand = new AsyncRelayCommand(ExecuteSwitchView);
+            CurrentViewModel = new HomeViewModel(_locationService, _weatherService, _wallpaperService);
         }
 
-        private async void GenerateWallpaper(object parameter)
+        private async Task ExecuteSwitchView()
         {
-            try
-            {
-                LocationData locationData = await _locationService.GetCurrentLocationAsync();
-
-
-                if (string.IsNullOrWhiteSpace(locationData.City) || string.IsNullOrEmpty(locationData.Country) || locationData.Latitude == null || locationData.Longitude == null)
-                {
-                    Console.WriteLine("Location data incomplete.");
-                    return;
-                }
-
-                var weatherData = await _weatherService.GetWeatherAsync(locationData);
-
-                if (weatherData == null)
-                {
-                    Console.WriteLine("Failed to get weather data.");
-                    return;
-                }
-                var wallpaperUrl = await _wallpaperService.GenerateWallpaperAsync(locationData.City, locationData.Country, weatherData.Condition, weatherData.TemperatureCelsius);
-                if (string.IsNullOrEmpty(wallpaperUrl))
-                {
-                    Console.WriteLine("Failed to generate wallpaper.");
-                    return;
-                }
-                await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
-
-                Console.WriteLine("Wallpaper set successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-
+            var viewModel = new PastImagesViewModel(_wallpaperInfoService);
+            await viewModel.InitializeAsync();
+            CurrentViewModel = viewModel;
         }
-
-        private void ViewPastImages(object parameter)
-        {
-
-        }
-
-        private void CustomOperation(object parameter)
-        {
-
-        }
-
 
         protected void OnPropertyChanged(string propertyName)
         {

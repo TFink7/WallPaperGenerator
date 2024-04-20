@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WallPaperGenerator.Views
 {
     /// <summary>
-    /// Interaction logic for PastImagesView.xaml
+    /// Interaction logic for InitialView.xaml
     /// </summary>
-    public partial class PastImagesView : UserControl
+    public partial class InitialView : UserControl
     {
-        public PastImagesView()
+        public InitialView()
         {
             InitializeComponent();
         }

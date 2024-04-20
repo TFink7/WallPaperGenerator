@@ -9,7 +9,7 @@ using WallPaperGenerator.Models;
 
 namespace WallPaperGenerator.Services
 {
-    public class WallpaperInfoService
+    public class WallpaperInfoService : IWallpaperInfoService
     {
         private readonly AppDbContext _context;
 
@@ -43,6 +43,16 @@ namespace WallPaperGenerator.Services
  
                 throw;
             }
+        }
+        public async Task<List<WallpaperInfo>> GetAllWallpapersAsync()
+        {
+            return await _context.Wallpapers
+                .Include(w => w.WeatherData)
+                .ToListAsync();
+        }
+        public async Task<WeatherData> GetWeatherDataByIdAsync(int id)
+        {
+            return await _context.WeatherData.FindAsync(id);
         }
     }
 }
