@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using WallPaperGenerator.Commands;
 using WallPaperGenerator.Models;
 using WallPaperGenerator.Services;
 
@@ -12,13 +14,17 @@ namespace WallPaperGenerator.ViewModels
     {
         public ObservableCollection<WallpaperInfo> Images { get; private set; }
         private readonly IWallpaperInfoService _wallpaperInfoService;
+        private readonly MainViewModel _mainViewModel;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public ICommand NavigateHomeCommand { get; private set; }
 
-        public PastImagesViewModel(IWallpaperInfoService wallpaperInfoService)
+        public PastImagesViewModel(IWallpaperInfoService wallpaperInfoService, MainViewModel mainViewModel)
         {
             _wallpaperInfoService = wallpaperInfoService;
             Images = new ObservableCollection<WallpaperInfo>();
+            _mainViewModel = mainViewModel;
+            NavigateHomeCommand = new RelayCommand(NavigateHome);
         }
 
         public async Task InitializeAsync()
@@ -43,6 +49,11 @@ namespace WallPaperGenerator.ViewModels
             {
                 ReportError(ex.Message); 
             }
+        }
+
+        private void NavigateHome(object parameter)
+        {
+            _mainViewModel.NavigateToHomeView();
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -13,5 +13,8 @@
         <DataTemplate DataType="{x:Type vm:PastImagesViewModel}">
             <views:PastImagesView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomWallpaperViewModel}">
+            <views:CustomWallPaperView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

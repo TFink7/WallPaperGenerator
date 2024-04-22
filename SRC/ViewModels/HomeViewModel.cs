@@ -13,7 +13,6 @@ namespace WallPaperGenerator.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand GenerateWallpaperCommand { get; private set; }
-        public ICommand CustomCommand { get; private set; }
 
         private readonly ILocationService _locationService;
         private readonly IWeatherService _weatherService;
@@ -25,7 +24,6 @@ namespace WallPaperGenerator.ViewModels
             _weatherService = weatherService;
             _wallpaperService = wallpaperService;
             GenerateWallpaperCommand = new RelayCommand(GenerateWallpaper);
-            CustomCommand = new RelayCommand(CustomOperation);
         }
 
         private async void GenerateWallpaper(object parameter)
@@ -62,9 +60,6 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
-        private void CustomOperation(object parameter)
-        {
-        }
 
         protected void OnPropertyChanged(string propertyName)
         {

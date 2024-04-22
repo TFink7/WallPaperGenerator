@@ -19,6 +19,7 @@ namespace WallPaperGenerator.ViewModels
         private readonly IWallpaperInfoService _wallpaperInfoService;
 
         public ICommand ViewPastImagesCommand { get; private set; }
+        public ICommand NavigateToCustomWallpaperViewCommand { get; private set; }
 
         private INotifyPropertyChanged _currentViewModel;
         public INotifyPropertyChanged CurrentViewModel
@@ -42,14 +43,25 @@ namespace WallPaperGenerator.ViewModels
             _wallpaperInfoService = infoService;
 
             ViewPastImagesCommand = new AsyncRelayCommand(ExecuteSwitchView);
+            NavigateToCustomWallpaperViewCommand = new RelayCommand(obj => NavigateToCustomWallpaperView());
             CurrentViewModel = new HomeViewModel(_locationService, _weatherService, _wallpaperService);
         }
 
         private async Task ExecuteSwitchView()
         {
-            var viewModel = new PastImagesViewModel(_wallpaperInfoService);
+            var viewModel = new PastImagesViewModel(_wallpaperInfoService, this);
             await viewModel.InitializeAsync();
             CurrentViewModel = viewModel;
+        }
+
+        public void NavigateToHomeView()
+        {
+            CurrentViewModel = new HomeViewModel(_locationService, _weatherService, _wallpaperService);
+        }
+
+        private void NavigateToCustomWallpaperView()
+        {
+            CurrentViewModel = new CustomWallpaperViewModel(_wallpaperService, this);
         }
 
         protected void OnPropertyChanged(string propertyName)

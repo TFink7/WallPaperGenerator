@@ -16,6 +16,7 @@ namespace WallPaperGenerator
     public partial class App : Application
     {
         private ServiceProvider _serviceProvider;
+        private MainViewModel _mainViewModel;
 
         public App()
         {
@@ -38,9 +39,15 @@ namespace WallPaperGenerator
             services.AddSingleton<IWallpaperService, WallpaperService>();
             services.AddSingleton<IWallpaperInfoService, WallpaperInfoService>();
 
-            services.AddTransient<MainViewModel>();
+            services.AddSingleton<MainViewModel>();
             services.AddTransient<PastImagesViewModel>();
             services.AddTransient<MainWindow>();
+
+            services.AddTransient<CustomWallpaperViewModel>(provider =>
+    new CustomWallpaperViewModel(provider.GetRequiredService<IWallpaperService>(), provider.GetRequiredService<MainViewModel>()));
+
+            services.AddTransient<PastImagesViewModel>(provider =>
+    new PastImagesViewModel(provider.GetRequiredService<IWallpaperInfoService>(), provider.GetRequiredService<MainViewModel>()));
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -53,12 +60,13 @@ namespace WallPaperGenerator
                 dbContext.Database.Migrate();
 
                 var mainWindow = scope.ServiceProvider.GetRequiredService<MainWindow>();
-                var mainViewModel = scope.ServiceProvider.GetRequiredService<MainViewModel>();
+                _mainViewModel = scope.ServiceProvider.GetRequiredService<MainViewModel>();
 
-                mainWindow.DataContext = mainViewModel;
+                mainWindow.DataContext = _mainViewModel;
 
                 mainWindow.Show();
             }
         }
+        public MainViewModel MainViewModel => _mainViewModel;
     }
 }
