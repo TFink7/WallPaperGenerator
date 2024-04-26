@@ -360,9 +360,12 @@ D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-wind
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.AssemblyInfoInputs.cache
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.AssemblyInfo.cs
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.csproj.CoreCompileInputs.cache
-D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.csproj.CopyComplete
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.dll
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\refint\WallPaperGeneratorTests.dll
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.pdb
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.genruntimeconfig.cache
 D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\ref\WallPaperGeneratorTests.dll
+D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\bin\Debug\net7.0-windows\Microsoft.Bcl.AsyncInterfaces.dll
+D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\bin\Debug\net7.0-windows\OpenAI_API.dll
+D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPaperGeneratorTests.sourcelink.json
+D:\source\repos\WallPaperGenerator\WallPaperGeneratorTests\obj\Debug\net7.0-windows\WallPape.9ACA741C.Up2Date

@@ -1,9 +1,20 @@
 ﻿<Application x:Class="WallPaperGenerator.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WallPaperGenerator"
-             StartupUri="MainWindow.xaml">
+             xmlns:vm="clr-namespace:WallPaperGenerator.ViewModels"
+             xmlns:views="clr-namespace:WallPaperGenerator.Views">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type vm:MainViewModel}">
+            <views:InitialView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:InitialView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PastImagesViewModel}">
+            <views:PastImagesView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomWallpaperViewModel}">
+            <views:CustomWallPaperView />
+        </DataTemplate>
     </Application.Resources>
 </Application>

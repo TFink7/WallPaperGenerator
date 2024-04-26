@@ -1,27 +1,54 @@
-﻿using System.Net.Http;
+﻿using Newtonsoft.Json;
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WallPaperGenerator.Models;
-using Newtonsoft.Json; 
 
 namespace WallPaperGenerator.Services
 {
     public class LocationService : ILocationService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public LocationService()
+
+
+        public LocationService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = new HttpClient();
+            _httpClientFactory = httpClientFactory;
+
         }
 
         public async Task<LocationData> GetCurrentLocationAsync()
         {
-            // Example API call to a geolocation service
-            string apiUrl = "https://api.ipgeolocation.io/ipgeo?apiKey=YOUR_API_KEY";
-            var response = await _httpClient.GetStringAsync(apiUrl);
-            var locationData = JsonConvert.DeserializeObject<LocationData>(response);
+            var apiKey = Environment.GetEnvironmentVariable("IPGEOLOCATION_API_KEY");
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                var response = await client.GetAsync($"https://api.ipgeolocation.io/ipgeo?apiKey={apiKey}");
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
 
-            return locationData;
+                try
+                {
+                    var locationData = JsonConvert.DeserializeObject<LocationData>(body) ?? throw new JsonSerializationException();
+                    return locationData;
+                }
+                catch (JsonReaderException e)
+                {
+                    Console.WriteLine($"\nInvalid JSON format: {e.Message}");
+                    return null;
+                }
+                catch (JsonSerializationException e)
+                {
+                    Console.WriteLine($"\nInvalid JSON content: {e.Message}");
+                    return null;
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine($"\nHTTP Request Exception caught: {e.Message}");
+                return null;
+            }
         }
     }
 }

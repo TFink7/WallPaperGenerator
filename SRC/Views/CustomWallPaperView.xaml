@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="WallPaperGenerator.Views.CustomWallPaperView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF4C4C4C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF6C6C6C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="#FF4C4C4C"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+        </Style>
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <TextBlock Text="Custom Wallpaper Generation" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,20,0,0" Foreground="#FF4C4C4C"/>
+
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0">
+            <TextBlock Text="City:" Style="{StaticResource TextBlockStyle}"/>
+            <TextBox Text="{Binding City}" Style="{StaticResource TextBoxStyle}"/>
+
+            <TextBlock Text="Country:" Style="{StaticResource TextBlockStyle}"/>
+            <TextBox Text="{Binding Country}" Style="{StaticResource TextBoxStyle}"/>
+
+            <TextBlock Text="Weather Condition:" Style="{StaticResource TextBlockStyle}"/>
+            <TextBox Text="{Binding Condition}" Style="{StaticResource TextBoxStyle}"/>
+
+            <TextBlock Text="Temperature (Celsius):" Style="{StaticResource TextBlockStyle}"/>
+            <TextBox Text="{Binding TemperatureCelsius}" Style="{StaticResource TextBoxStyle}"/>
+
+            <Button Content="Generate Custom Wallpaper" Command="{Binding GenerateCustomWallpaperCommand}" Style="{StaticResource ButtonStyle}" Margin="0,20,0,0"/>
+            <Button Content="Back to Home" Command="{Binding NavigateHomeCommand}" Style="{StaticResource ButtonStyle}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
