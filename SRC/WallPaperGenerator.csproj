@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Images\ClearSky.jpg" />
+    <None Remove="Views\Images\CloudySky.jpg" />
+    <None Remove="Views\Images\DefaultSky.jpg" />
+    <None Remove="Views\Images\RainySky.jpg" />
+    <None Remove="Views\Images\SnowySky.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
@@ -20,6 +28,14 @@
     <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OpenAI" Version="1.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Images\ClearSky.jpg" />
+    <Resource Include="Views\Images\CloudySky.jpg" />
+    <Resource Include="Views\Images\DefaultSky.jpg" />
+    <Resource Include="Views\Images\RainySky.jpg" />
+    <Resource Include="Views\Images\SnowySky.jpg" />
   </ItemGroup>
 
 </Project>

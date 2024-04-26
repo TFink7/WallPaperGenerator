@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WallPaperGeneratorTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a98830b64acfc3991cbee919e5386d2fca1fc0a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+284f82c7d3b867d4677c3dd87fc3b09f59a4c52e")]
 [assembly: System.Reflection.AssemblyProductAttribute("WallPaperGeneratorTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WallPaperGeneratorTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

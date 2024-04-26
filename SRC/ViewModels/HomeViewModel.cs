@@ -18,6 +18,59 @@ namespace WallPaperGenerator.ViewModels
         private readonly IWeatherService _weatherService;
         private readonly IWallpaperService _wallpaperService;
         private bool _isGenerating;
+        private string _backgroundImagePath;
+        public string BackgroundImagePath
+        {
+            get => _backgroundImagePath;
+            set
+            {
+                if (_backgroundImagePath != value)
+                {
+                    _backgroundImagePath = value;
+                    OnPropertyChanged(nameof(BackgroundImagePath));
+                }
+            }
+        }
+
+        private string _currentWeatherCondition;
+        public string CurrentWeatherCondition
+        {
+            get => _currentWeatherCondition;
+            set
+            {
+                if (_currentWeatherCondition != value)
+                {
+                    _currentWeatherCondition = value;
+                    OnPropertyChanged(nameof(CurrentWeatherCondition));
+                    UpdateBackgroundImage();
+                }
+            }
+        }
+        private void UpdateBackgroundImage()
+        {
+            string imagePath = string.Empty;
+
+            switch (CurrentWeatherCondition.ToLower())
+            {
+                case "clear":
+                    imagePath = "pack://application:,,,/Views/Images/ClearSky.jpg";
+                    break;
+                case "cloudy":
+                    imagePath = "pack://application:,,,/Views/Images/CloudySky.jpg";
+                    break;
+                case "rainy":
+                    imagePath = "pack://application:,,,/Views/Images/RainySky.jpg";
+                    break;
+                case "snowy":
+                    imagePath = "pack://application:,,,/Views/Images/SnowySky.jpg";
+                    break;
+                default:
+                    imagePath = "pack://application:,,,/Views/Images/DefaultSky.jpg";
+                    break;
+            }
+
+            BackgroundImagePath = imagePath;
+        }
 
         public bool IsGenerating
         {
@@ -46,6 +99,7 @@ namespace WallPaperGenerator.ViewModels
             _weatherService = weatherService;
             _wallpaperService = wallpaperService;
             GenerateWallpaperCommand = new AsyncRelayCommand(GenerateWallpaper);
+            BackgroundImagePath = "/Views/Images/DefaultSky.jpg";
         }
 
         private async Task GenerateWallpaper()
@@ -85,6 +139,7 @@ namespace WallPaperGenerator.ViewModels
                     return;
                 }
 
+                CurrentWeatherCondition = weatherData.Condition;
                 await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
                 Console.WriteLine("Wallpaper set successfully.");
 

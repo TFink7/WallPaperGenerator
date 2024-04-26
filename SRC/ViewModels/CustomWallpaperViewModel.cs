@@ -8,8 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using WallPaperGenerator.Commands;
 using WallPaperGenerator.Services;
+using System.Windows;
 
 namespace WallPaperGenerator.ViewModels
 {
@@ -22,6 +25,21 @@ namespace WallPaperGenerator.ViewModels
 
         public ICommand GenerateCustomWallpaperCommand { get; private set; }
         public ICommand NavigateHomeCommand { get; private set; }
+
+        private string _currentWeatherCondition;
+        public string CurrentWeatherCondition
+        {
+            get => _currentWeatherCondition;
+            set
+            {
+                if (_currentWeatherCondition != value)
+                {
+                    _currentWeatherCondition = value;
+                    OnPropertyChanged(nameof(CurrentWeatherCondition));
+                    UpdateSkyBackground();
+                }
+            }
+        }
 
         private bool _isGenerating;
         public bool IsGenerating
@@ -135,6 +153,49 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        private string _backgroundImagePath;
+        public string BackgroundImagePath
+        {
+            get => _backgroundImagePath;
+            set
+            {
+                if (_backgroundImagePath != value)
+                {
+                    _backgroundImagePath = value;
+                    OnPropertyChanged(nameof(BackgroundImagePath));
+                }
+            }
+        }
+
+
+        private void UpdateSkyBackground()
+        {
+            string imagePath = string.Empty;
+
+            switch (CurrentWeatherCondition.ToLower())
+            {
+                case "clear":
+                    imagePath = "/Views/Images/ClearSky.jpg";
+                    break;
+                case "cloudy":
+                    imagePath = "/Views/Images/CloudySky.jpg";
+                    break;
+                case "rainy":
+                    imagePath = "/Views/Images/RainySky.jpg";
+                    break;
+                case "snowy":
+                    imagePath = "/Views/Images/SnowySky.jpg";
+                    break;
+                default:
+                    imagePath = "/Views/Images/DefaultSky.jpg";
+                    break;
+            }
+
+            BackgroundImagePath = imagePath;
+        }
+
+
+
         private string _city;
         public string City
         {
@@ -196,6 +257,7 @@ namespace WallPaperGenerator.ViewModels
         {
             _wallpaperService = wallpaperService;
             _mainViewModel = mainViewModel;
+            BackgroundImagePath = "/Views/Images/DefaultSky.jpg";
 
             NavigateHomeCommand = new RelayCommand(NavigateHome);
             GenerateCustomWallpaperCommand = new AsyncRelayCommand(GenerateCustomWallpaper);
@@ -226,6 +288,8 @@ namespace WallPaperGenerator.ViewModels
 
                 await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
                 Console.WriteLine("Custom wallpaper set successfully.");
+
+                CurrentWeatherCondition = Condition;
 
                 await Task.Run(async () =>
                 {

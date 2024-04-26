@@ -42,6 +42,9 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="{Binding BackgroundImagePath}" Stretch="UniformToFill"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
