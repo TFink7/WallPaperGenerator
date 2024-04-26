@@ -20,6 +20,7 @@ namespace WallPaperGenerator.Services
         private readonly OpenAIAPI _api;
         private readonly IWallpaperInfoService _infoService;
 
+
         public WallpaperService(IWallpaperInfoService wallpaperInfoService)
         {
             _api = new OpenAIAPI(APIAuthentication.Default);
@@ -28,6 +29,7 @@ namespace WallPaperGenerator.Services
 
         public async Task<string> GenerateWallpaperAsync(string city, string country, string condition, double temperatureCelsius)
         {
+
             var prompt = $"An imaginative wallpaper background showcasing {city} in {country} with {condition} weather at {temperatureCelsius}°C";
             var request = new ImageGenerationRequest(prompt, OpenAI_API.Models.Model.DALLE3, ImageSize._1024);
 
@@ -62,7 +64,6 @@ namespace WallPaperGenerator.Services
                 };
 
                 await _infoService.AddOrUpdateWallpaperInfoAsync(wallpaperInfo);
-
                 return localPath;
             }
             else

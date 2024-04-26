@@ -42,13 +42,11 @@ namespace WallPaperGenerator.Services
                 }
                 catch (JsonReaderException e)
                 {
-                    //handle invalid JSON format
                     Console.WriteLine($"\nInvalid JSON format: {e.Message}");
                     return null;
                 }
                 catch (JsonSerializationException e)
                 {
-                    //handle invalid JSON data
                     Console.WriteLine($"\nInvalid JSON data: {e.Message}");
                     return null;
                 }
