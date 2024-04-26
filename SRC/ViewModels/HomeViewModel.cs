@@ -17,17 +17,51 @@ namespace WallPaperGenerator.ViewModels
         private readonly ILocationService _locationService;
         private readonly IWeatherService _weatherService;
         private readonly IWallpaperService _wallpaperService;
+        private bool _isGenerating;
+
+        public bool IsGenerating
+        {
+            get => _isGenerating;
+            set
+            {
+                _isGenerating = value;
+                OnPropertyChanged(nameof(IsGenerating));
+            }
+        }
+
+        private double _progressValue;
+        public double ProgressValue
+        {
+            get => _progressValue;
+            set
+            {
+                _progressValue = value;
+                OnPropertyChanged(nameof(ProgressValue));
+            }
+        }
 
         public HomeViewModel(ILocationService locationService, IWeatherService weatherService, IWallpaperService wallpaperService)
         {
             _locationService = locationService;
             _weatherService = weatherService;
             _wallpaperService = wallpaperService;
-            GenerateWallpaperCommand = new RelayCommand(GenerateWallpaper);
+            GenerateWallpaperCommand = new AsyncRelayCommand(GenerateWallpaper);
         }
 
-        private async void GenerateWallpaper(object parameter)
+        private async Task GenerateWallpaper()
         {
+            IsGenerating = true;
+            ProgressValue = 0;
+
+            await Task.Run(async () =>
+            {
+                while (ProgressValue < 90)
+                {
+                    await Task.Delay(100);
+                    ProgressValue += 1;
+                }
+            });
+
             try
             {
                 LocationData locationData = await _locationService.GetCurrentLocationAsync();
@@ -53,13 +87,25 @@ namespace WallPaperGenerator.ViewModels
 
                 await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
                 Console.WriteLine("Wallpaper set successfully.");
+
+                await Task.Run(async () =>
+                {
+                    while (ProgressValue < 100)
+                    {
+                        await Task.Delay(50);
+                        ProgressValue += 1;
+                    }
+                });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
+            finally
+            {
+                IsGenerating = false;
+            }
         }
-
 
         protected void OnPropertyChanged(string propertyName)
         {
