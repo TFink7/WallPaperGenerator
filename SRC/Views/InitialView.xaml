@@ -27,6 +27,34 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="#FF4C4C4C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="30,15"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}"
+                        CornerRadius="5"
+                        Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter Property="Background" Value="#FF4C4C4C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -51,12 +79,16 @@
             <Button Content="View Past Images" Command="{Binding DataContext.ViewPastImagesCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource ButtonStyle}" Width="227.67"/>
         </StackPanel>
 
-        <Grid Grid.Row="2" HorizontalAlignment="Center" Margin="0,10,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Custom" Command="{Binding DataContext.NavigateToCustomWallpaperViewCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource ButtonStyle}" Width="227.67"/>
-        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <Button Content="Custom" Command="{Binding DataContext.NavigateToCustomWallpaperViewCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource ButtonStyle}" Width="227.67"/>
+            <ToggleButton x:Name="DailyWallpaperToggle" 
+                  Content="Run in Background" 
+                  IsChecked="{Binding IsDailyWallpaperEnabled}" 
+                  Style="{StaticResource ToggleButtonStyle}" 
+                  Width="227.67"/>
+        </StackPanel>
+
+
 
         <ProgressBar Grid.Row="4" Height="20" Minimum="0" Maximum="100" Value="{Binding ProgressValue}"
                      Foreground="Green" BorderThickness="0" Background="#FFE0E0E0" Margin="0,10,0,0">

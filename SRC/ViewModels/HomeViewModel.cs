@@ -93,6 +93,51 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        private bool _isDailyWallpaperEnabled;
+        public bool IsDailyWallpaperEnabled
+        {
+            get => _isDailyWallpaperEnabled;
+            set
+            {
+                _isDailyWallpaperEnabled = value;
+                OnPropertyChanged(nameof(IsDailyWallpaperEnabled));
+                ScheduleDailyWallpaperGeneration();
+            }
+        }
+
+        private async void ScheduleDailyWallpaperGeneration()
+        {
+            if (IsDailyWallpaperEnabled)
+            {
+                while (IsDailyWallpaperEnabled)
+                {
+                    var now = DateTime.Now;
+                    var scheduledTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
+
+                    if (now > scheduledTime)
+                    {
+                        scheduledTime = scheduledTime.AddDays(1);
+                    }
+
+                    var delay = scheduledTime - now;
+                    if (delay > TimeSpan.FromMinutes(1))
+                    {
+                        await Task.Delay(delay - TimeSpan.FromMinutes(1));
+                    }
+
+                    while (DateTime.Now < scheduledTime && IsDailyWallpaperEnabled)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(30));
+                    }
+
+                    if (IsDailyWallpaperEnabled && DateTime.Now >= scheduledTime)
+                    {
+                        await GenerateWallpaper();
+                    }
+                }
+            }
+        }
+
         public HomeViewModel(ILocationService locationService, IWeatherService weatherService, IWallpaperService wallpaperService)
         {
             _locationService = locationService;
@@ -100,6 +145,7 @@ namespace WallPaperGenerator.ViewModels
             _wallpaperService = wallpaperService;
             GenerateWallpaperCommand = new AsyncRelayCommand(GenerateWallpaper);
             BackgroundImagePath = "/Views/Images/DefaultSky.jpg";
+            IsDailyWallpaperEnabled = false;
         }
 
         private async Task GenerateWallpaper()
