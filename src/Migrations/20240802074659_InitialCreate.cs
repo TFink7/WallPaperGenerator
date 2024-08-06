@@ -15,7 +15,7 @@ namespace WallPaperGenerator.Migrations
                 name: "WeatherData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    WeatherID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Condition = table.Column<string>(type: "TEXT", nullable: false),
                     TemperatureCelsius = table.Column<double>(type: "REAL", nullable: false),
@@ -23,14 +23,14 @@ namespace WallPaperGenerator.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeatherData", x => x.Id);
+                    table.PrimaryKey("PK_WeatherData", x => x.WeatherID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Wallpapers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    WallPaperInfoID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ImagePath = table.Column<string>(type: "TEXT", nullable: false),
                     Location = table.Column<string>(type: "TEXT", nullable: false),
@@ -38,12 +38,12 @@ namespace WallPaperGenerator.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wallpapers", x => x.Id);
+                    table.PrimaryKey("PK_Wallpapers", x => x.WallPaperInfoID);
                     table.ForeignKey(
                         name: "FK_Wallpapers_WeatherData_WeatherDataId",
                         column: x => x.WeatherDataId,
                         principalTable: "WeatherData",
-                        principalColumn: "Id",
+                        principalColumn: "WeatherID",
                         onDelete: ReferentialAction.Cascade);
                 });
 

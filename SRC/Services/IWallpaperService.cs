@@ -10,6 +10,6 @@ namespace WallPaperGenerator.Services
     public interface IWallpaperService
     {
         Task<string> GenerateWallpaperAsync(string city, string country, string condition, double temperatureCelsius);
-        Task SetWallpaperAsync(string imagePath);
+        void SetWallpaper(string imagePath);
     }
 }

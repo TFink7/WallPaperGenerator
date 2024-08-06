@@ -31,7 +31,7 @@ public class WeatherServiceTests
         _weatherService = new WeatherService(_mockHttpClientFactory.Object);
         Environment.SetEnvironmentVariable("WEATHER_API_KEY", _validApiKey);
 
-        _testLocationData = new LocationData { City = "TestCity", Country = "TestCountry", Latitude = "43.6532", Longitude = "-79.3832" };
+        _testLocationData = new LocationData("TestCity", "TestCountry", "43.6532", "-79.3832");
     }
 
     [TestMethod]

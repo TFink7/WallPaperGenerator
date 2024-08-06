@@ -36,7 +36,7 @@ public class LocationServiceTests
     {
         var fakeResponseMessage = new HttpResponseMessage(HttpStatusCode.OK)
         {
-            Content = new StringContent("{\"city\":\"TestCity\",\"country_name\":\"TestCountry\", \"latitude\":\"43.6532\", \"longitude\":\"-79.3832\"}")
+            Content = new StringContent("{\"city\":\"TestCity\",\"country_name\":\"TestCountry\", \"latitude\":\"43.65\", \"longitude\":\"-79.3\"}")
         };
 
         _mockHttpMessageHandler.Protected()
@@ -54,8 +54,8 @@ public class LocationServiceTests
         Assert.AreEqual("TestCountry", result.Country); 
                                                         
                                                         
-        Assert.AreEqual("43.6532", result.Latitude);
-        Assert.AreEqual("-79.3832", result.Longitude);
+        Assert.AreEqual("43.65", result.Latitude);
+        Assert.AreEqual("-79.3", result.Longitude);
     }
 
     [TestMethod]

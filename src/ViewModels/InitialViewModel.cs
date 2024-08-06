@@ -46,6 +46,8 @@ namespace WallPaperGenerator.ViewModels
                 }
             }
         }
+
+        // Method to update the background image based on the current weather condition
         private void UpdateBackgroundImage()
         {
             string imagePath = string.Empty;
@@ -72,6 +74,7 @@ namespace WallPaperGenerator.ViewModels
             BackgroundImagePath = imagePath;
         }
 
+        // Property to check if the wallpaper generation is in progress
         public bool IsGenerating
         {
             get => _isGenerating;
@@ -82,6 +85,7 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        // Property to display progress of wallpaper generation in progress bar
         private double _progressValue;
         public double ProgressValue
         {
@@ -93,6 +97,7 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        // Property to enable scheduled daily wallpaper generation
         private bool _isDailyWallpaperEnabled;
         public bool IsDailyWallpaperEnabled
         {
@@ -104,37 +109,31 @@ namespace WallPaperGenerator.ViewModels
                 ScheduleDailyWallpaperGeneration();
             }
         }
-
+        
         private async void ScheduleDailyWallpaperGeneration()
         {
-            if (IsDailyWallpaperEnabled)
+            while (IsDailyWallpaperEnabled)
             {
-                while (IsDailyWallpaperEnabled)
+                var now = DateTime.Now;
+                var scheduledTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
+
+                if (now > scheduledTime)
                 {
-                    var now = DateTime.Now;
-                    var scheduledTime = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
-
-                    if (now > scheduledTime)
-                    {
-                        scheduledTime = scheduledTime.AddDays(1);
-                    }
-
-                    var delay = scheduledTime - now;
-                    if (delay > TimeSpan.FromMinutes(1))
-                    {
-                        await Task.Delay(delay - TimeSpan.FromMinutes(1));
-                    }
-
-                    while (DateTime.Now < scheduledTime && IsDailyWallpaperEnabled)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(30));
-                    }
-
-                    if (IsDailyWallpaperEnabled && DateTime.Now >= scheduledTime)
-                    {
-                        await GenerateWallpaper();
-                    }
+                    scheduledTime = scheduledTime.AddDays(1);
                 }
+
+                var delay = scheduledTime - now;
+                if (delay > TimeSpan.Zero)
+                {
+                    await Task.Delay(delay);
+                }
+
+                if (IsDailyWallpaperEnabled && DateTime.Now >= scheduledTime)
+                {
+                    await GenerateWallpaper();
+                }
+
+                await Task.Delay(TimeSpan.FromDays(1));
             }
         }
 
@@ -186,7 +185,7 @@ namespace WallPaperGenerator.ViewModels
                 }
 
                 CurrentWeatherCondition = weatherData.Condition;
-                await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
+                _wallpaperService.SetWallpaper(wallpaperUrl);
                 Console.WriteLine("Wallpaper set successfully.");
 
                 await Task.Run(async () =>

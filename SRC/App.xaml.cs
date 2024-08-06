@@ -32,7 +32,6 @@ namespace WallPaperGenerator
                 options.UseSqlite("Data Source=wallpaperGenerator.db");
             });
 
-
             services.AddHttpClient();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<IWeatherService, WeatherService>();
@@ -44,10 +43,9 @@ namespace WallPaperGenerator
             services.AddTransient<MainWindow>();
 
             services.AddTransient<CustomWallpaperViewModel>(provider =>
-    new CustomWallpaperViewModel(provider.GetRequiredService<IWallpaperService>(), provider.GetRequiredService<MainViewModel>()));
+                new CustomWallpaperViewModel(provider.GetRequiredService<IWallpaperService>(), provider.GetRequiredService<MainViewModel>()));
 
-            services.AddTransient<PastImagesViewModel>(provider =>
-    new PastImagesViewModel(provider.GetRequiredService<IWallpaperInfoService>(), provider.GetRequiredService<MainViewModel>()));
+            services.AddTransient<PastImagesViewModel>(provider => new PastImagesViewModel(provider.GetRequiredService<IWallpaperInfoService>(), provider.GetRequiredService<MainViewModel>(), provider.GetRequiredService<IWallpaperService>()));
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -57,7 +55,13 @@ namespace WallPaperGenerator
             using (var scope = _serviceProvider.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                dbContext.Database.Migrate();
+
+                
+                var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
+                if (pendingMigrations.Any())
+                {
+                    dbContext.Database.Migrate();
+                }
 
                 var mainWindow = scope.ServiceProvider.GetRequiredService<MainWindow>();
                 _mainViewModel = scope.ServiceProvider.GetRequiredService<MainViewModel>();
