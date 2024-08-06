@@ -1,6 +1,6 @@
 # WallpaperGenerator
 
-WallpaperGenerator is a desktop application that creates and applies unique wallpapers based on the user's location and local weather conditions.
+WallpaperGenerator is a desktop application that generates and applies unique wallpapers based on the user's location and local weather conditions.
 
 ## Features
 
