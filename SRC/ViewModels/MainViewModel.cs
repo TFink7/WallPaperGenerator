@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace WallPaperGenerator.ViewModels
 {
+    // Central ViewModel that manages the navigation between different views
     public class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,6 +36,7 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        // Injecting all dependencies for navigation
         public MainViewModel(ILocationService locationService, IWeatherService weatherService, IWallpaperService wallpaperService, IWallpaperInfoService infoService)
         {
             _locationService = locationService;
@@ -42,15 +44,15 @@ namespace WallPaperGenerator.ViewModels
             _wallpaperService = wallpaperService;
             _wallpaperInfoService = infoService;
 
-            ViewPastImagesCommand = new AsyncRelayCommand(ExecuteSwitchView);
+            ViewPastImagesCommand = new AsyncRelayCommand(NavigateToPastWallPaperView);
             NavigateToCustomWallpaperViewCommand = new RelayCommand(obj => NavigateToCustomWallpaperView());
             CurrentViewModel = new HomeViewModel(_locationService, _weatherService, _wallpaperService);
         }
 
-        private async Task ExecuteSwitchView()
+        private async Task NavigateToPastWallPaperView()
         {
-            var viewModel = new PastImagesViewModel(_wallpaperInfoService, this);
-            await viewModel.InitializeAsync();
+            var viewModel = new PastImagesViewModel(_wallpaperInfoService, this, _wallpaperService); 
+            await viewModel.LoadImagesAsync();
             CurrentViewModel = viewModel;
         }
 

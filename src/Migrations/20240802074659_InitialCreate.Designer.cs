@@ -11,7 +11,7 @@ using WallPaperGenerator.Data;
 namespace WallPaperGenerator.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240412214907_InitialCreate")]
+    [Migration("20240802074659_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace WallPaperGenerator.Migrations
 
             modelBuilder.Entity("WallPaperGenerator.Models.WallpaperInfo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("WallPaperInfoID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -37,7 +37,7 @@ namespace WallPaperGenerator.Migrations
                     b.Property<int>("WeatherDataId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("WallPaperInfoID");
 
                     b.HasIndex("WeatherDataId");
 
@@ -46,7 +46,7 @@ namespace WallPaperGenerator.Migrations
 
             modelBuilder.Entity("WallPaperGenerator.Models.WeatherData", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("WeatherID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -60,7 +60,7 @@ namespace WallPaperGenerator.Migrations
                     b.Property<double>("TemperatureCelsius")
                         .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                    b.HasKey("WeatherID");
 
                     b.ToTable("WeatherData");
                 });

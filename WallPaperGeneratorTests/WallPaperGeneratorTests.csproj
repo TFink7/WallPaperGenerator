@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SRC\WallPaperGenerator.csproj" />
+    <ProjectReference Include="..\src\WallPaperGenerator.csproj" />
   </ItemGroup>
 
 </Project>

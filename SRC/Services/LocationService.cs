@@ -10,22 +10,23 @@ namespace WallPaperGenerator.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-
-
         public LocationService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-
         }
 
+        // Asynchronously retrieves current location data for use in image generation and fetching weather data
         public async Task<LocationData> GetCurrentLocationAsync()
         {
             var apiKey = Environment.GetEnvironmentVariable("IPGEOLOCATION_API_KEY");
             try
             {
                 var client = _httpClientFactory.CreateClient();
+
                 var response = await client.GetAsync($"https://api.ipgeolocation.io/ipgeo?apiKey={apiKey}");
+
                 response.EnsureSuccessStatusCode();
+
                 var body = await response.Content.ReadAsStringAsync();
 
                 try

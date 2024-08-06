@@ -8,8 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using WallPaperGenerator.Commands;
 using WallPaperGenerator.Services;
+using System.Windows;
 
 namespace WallPaperGenerator.ViewModels
 {
@@ -23,6 +26,22 @@ namespace WallPaperGenerator.ViewModels
         public ICommand GenerateCustomWallpaperCommand { get; private set; }
         public ICommand NavigateHomeCommand { get; private set; }
 
+        private string _currentWeatherCondition;
+        public string CurrentWeatherCondition
+        {
+            get => _currentWeatherCondition;
+            set
+            {
+                if (_currentWeatherCondition != value)
+                {
+                    _currentWeatherCondition = value;
+                    OnPropertyChanged(nameof(CurrentWeatherCondition));
+                    UpdateSkyBackground();
+                }
+            }
+        }
+
+        // Property to indicate if wallpaper is being generated for progress bar
         private bool _isGenerating;
         public bool IsGenerating
         {
@@ -34,6 +53,7 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        // Property to indicate progress of wallpaper generation for progress bar
         private double _progressValue;
         public double ProgressValue
         {
@@ -44,6 +64,8 @@ namespace WallPaperGenerator.ViewModels
                 OnPropertyChanged(nameof(ProgressValue));
             }
         }
+
+        // Dictionary for storing property validation errors
         private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
         public bool HasErrors
@@ -61,6 +83,7 @@ namespace WallPaperGenerator.ViewModels
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
+        // Method to get validation errors for properties
         public IEnumerable GetErrors(string propertyName)
         {
             if (_errors.ContainsKey(propertyName))
@@ -70,6 +93,7 @@ namespace WallPaperGenerator.ViewModels
             return null;
         }
 
+        // Method to validate all properties to alert users of any errors
         private void ValidateProperty(string propertyName)
         {
             ClearErrors(propertyName);
@@ -97,6 +121,7 @@ namespace WallPaperGenerator.ViewModels
             CanGenerateWallpaper = !HasErrors;
         }
 
+        // Method to add validation errors for properties
         private void AddError(string propertyName, string errorMessage)
         {
             if (!_errors.ContainsKey(propertyName))
@@ -107,6 +132,7 @@ namespace WallPaperGenerator.ViewModels
             OnErrorsChanged(propertyName);
         }
 
+        // Method to clear validation errors for properties
         private void ClearErrors(string propertyName)
         {
             if (_errors.ContainsKey(propertyName))
@@ -116,11 +142,13 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+        // Method to raise event when validation errors change to alert users
         private void OnErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
+        // Property to ensure wallpaper generation can proceed only if no validation errors exist
         private bool _canGenerateWallpaper;
         public bool CanGenerateWallpaper
         {
@@ -134,6 +162,49 @@ namespace WallPaperGenerator.ViewModels
                 }
             }
         }
+
+        private string _backgroundImagePath;
+        public string BackgroundImagePath
+        {
+            get => _backgroundImagePath;
+            set
+            {
+                if (_backgroundImagePath != value)
+                {
+                    _backgroundImagePath = value;
+                    OnPropertyChanged(nameof(BackgroundImagePath));
+                }
+            }
+        }
+
+        // Method to set background image based on current weather
+        private void UpdateSkyBackground()
+        {
+            string imagePath = string.Empty;
+
+            switch (CurrentWeatherCondition.ToLower())
+            {
+                case "clear":
+                    imagePath = "/Views/Images/ClearSky.jpg";
+                    break;
+                case "cloudy":
+                    imagePath = "/Views/Images/CloudySky.jpg";
+                    break;
+                case "rainy":
+                    imagePath = "/Views/Images/RainySky.jpg";
+                    break;
+                case "snowy":
+                    imagePath = "/Views/Images/SnowySky.jpg";
+                    break;
+                default:
+                    imagePath = "/Views/Images/DefaultSky.jpg";
+                    break;
+            }
+
+            BackgroundImagePath = imagePath;
+        }
+
+
 
         private string _city;
         public string City
@@ -192,15 +263,18 @@ namespace WallPaperGenerator.ViewModels
             }
         }
 
+     
         public CustomWallpaperViewModel(IWallpaperService wallpaperService, MainViewModel mainViewModel)
         {
             _wallpaperService = wallpaperService;
             _mainViewModel = mainViewModel;
+            BackgroundImagePath = "/Views/Images/DefaultSky.jpg";
 
             NavigateHomeCommand = new RelayCommand(NavigateHome);
             GenerateCustomWallpaperCommand = new AsyncRelayCommand(GenerateCustomWallpaper);
         }
 
+        // Method to generate custom wallpaper based on user input
         private async Task GenerateCustomWallpaper()
         {
             IsGenerating = true;
@@ -224,8 +298,10 @@ namespace WallPaperGenerator.ViewModels
                     return;
                 }
 
-                await _wallpaperService.SetWallpaperAsync(wallpaperUrl);
+                _wallpaperService.SetWallpaper(wallpaperUrl);
                 Console.WriteLine("Custom wallpaper set successfully.");
+
+                CurrentWeatherCondition = Condition;
 
                 await Task.Run(async () =>
                 {

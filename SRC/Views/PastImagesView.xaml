@@ -30,6 +30,35 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="SmallButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF4C4C4C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <!-- Smaller font size -->
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <!-- Smaller padding -->
+            <Setter Property="Margin" Value="5"/>
+            <!-- Smaller margin -->
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF6C6C6C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -41,8 +70,8 @@
         <Button Grid.Row="0" Content="Home" Command="{Binding NavigateHomeCommand}"
                 HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" />
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Images}">
-            <ListView.ItemTemplate>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Images}">
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -58,10 +87,11 @@
                             <TextBlock Text="{Binding WeatherData.Condition}" FontSize="14" Foreground="#FF6C6C6C" />
                             <TextBlock Text="{Binding WeatherData.TemperatureCelsius, StringFormat='Temperature: {0}°C'}" FontSize="14" Foreground="#FF6C6C6C" />
                             <TextBlock Text="{Binding WeatherData.DataCapturedDate, StringFormat='Date Captured: {0:yyyy-MM-dd}'}" FontSize="14" Foreground="#FF6C6C6C" />
+                            <Button Content="Set as Wallpaper" Command="{Binding DataContext.SetWallpaperCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding}" Style="{StaticResource SmallButtonStyle}" HorizontalAlignment="Left" />
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>
