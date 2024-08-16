@@ -9,7 +9,7 @@ WallpaperGenerator is a desktop application that generates and applies unique wa
 - **View Past Wallpapers**: Browse and reuse previously generated wallpapers.
 - **Daily Automatic Updates**: Automatically updates the wallpaper every day at 8 AM.
 - **Integration with OpenAI and APIs**:
-  - Uses OpenAI's DALL-E 3 API for image generation.
+  - Uses OpenAI's DALL-E 3 for image generation.
   - Fetches weather data from the WeatherAPI.
   - Fetches location data from the IPGeolocation API.
 
