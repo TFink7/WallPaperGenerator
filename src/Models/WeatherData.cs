@@ -17,6 +17,7 @@ namespace WallPaperGenerator.Models
         [Required]
         public DateTime DataCapturedDate { get; set; }
 
+        // Parameterless constructor for EF Core
         public WeatherData() { }
 
         public WeatherData(string condition, double temperatureCelsius, DateTime dataCapturedDate)
