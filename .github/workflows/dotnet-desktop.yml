@@ -68,14 +68,14 @@ jobs:
       run: msbuild ${{ env.Solution_Name }} /t:Restore /p:Configuration=${{ matrix.configuration }}
       working-directory: ./
       env:
-        Solution_Name: SRC/WallPaperGenerator.sln
+        Solution_Name: src/WallPaperGenerator.sln
         Configuration: ${{ matrix.configuration }}
 
     - name: Execute unit tests
       run: dotnet test ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }}
       working-directory: ./
       env:
-        Solution_Name: SRC/WallPaperGenerator.sln
+        Solution_Name: src/WallPaperGenerator.sln
         Configuration: ${{ matrix.configuration }}
 
  
