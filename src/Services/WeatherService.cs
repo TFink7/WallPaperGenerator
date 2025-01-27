@@ -35,9 +35,12 @@ namespace WallPaperGenerator.Services
                 try
                 {
                     dynamic? data = JsonConvert.DeserializeObject<dynamic>(body) ?? throw new JsonSerializationException();
-
-                    var weatherData = new WeatherData(data.current.condition.text, data.current.temp_c, DateTime.Now);
-
+                
+                    string condition = (string)data.current.condition.text;
+                    double temperature = (double)data.current.temp_c;
+                
+                    var weatherData = new WeatherData(condition, temperature, DateTime.Now);
+                
                     return weatherData;
                 }
                 catch (JsonReaderException e)
